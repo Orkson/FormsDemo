@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WinForms
 {
     [Table("SalesOrderHeader", Schema = "Sales")]
-    internal class SalesOrderHeader
+    public class SalesOrderHeader
     {
         [Key]
         public int SalesPersonID { get; set; }

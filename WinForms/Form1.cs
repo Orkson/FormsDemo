@@ -12,10 +12,13 @@ namespace WinForms
             newContext = new Context();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void button1_Click(object sender, EventArgs e)
         {
+            //Wyczyszcenie kolumn i wierszy przed kolejnym zapytaniem
             dataGridView1.Rows.Clear();
             dataGridView1.Columns.Clear();
+
+            //Dodanie kolumn
             dataGridView1.Columns.Add("SalesPersonID", "ID_sprzedawcy");
             dataGridView1.Columns.Add("TotalOrders", "Sumaryczna_iloœæ_zamówieñ");
             dataGridView1.Columns.Add("TotalDue", "Sumaryczna_wartoœæ_zamówieñ");
@@ -26,6 +29,7 @@ namespace WinForms
             int year = Convert.ToInt32(comboBox1.SelectedItem);
             int rows = Convert.ToInt32(numericUpDown2.Value);
 
+            //wy³uskanie z bazy danych odpowiednich informacji
             var data = newContext.SalesOrderHeader
             .Where(x => x.OrderDate.Year == year)
             .GroupBy(x => x.SalesPersonID)
@@ -41,13 +45,13 @@ namespace WinForms
                 .Take(rows+1)
                 .ToList();
 
+            //wypisanie wszystkich danych do dataGridView1
             foreach (var item in data.Where(i => i != null))
             {                
                 dataGridView1.Rows.Add(item.SalesPersonID, item.TotalOrders, item.TotalDue, item.CurrencyRateIDSet, item.CurrencyRateIDNotSet);
             }
 
-
-            // Dostosuj wysokoœæ okna do wysokoœci DataGridView
+            //dostosowanie okna do iloœci wierszy
             int totalRowsHeight = dataGridView1.ColumnHeadersHeight + dataGridView1.Rows.Cast<DataGridViewRow>().Sum(r => r.Height);
             this.Height = totalRowsHeight + 200; dataGridView1.AutoResizeColumns();
             dataGridView1.Height = dataGridView1.ColumnHeadersHeight + (dataGridView1.RowCount * 25);
@@ -58,8 +62,7 @@ namespace WinForms
         {
 
         }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        public void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
         }
 
