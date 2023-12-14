@@ -5,14 +5,19 @@ namespace WinForms
 {
     public partial class Form1 : Form
     {
-        private Context newContext;
-        public Form1()
+        private INewContext newContext;
+        public Form1(INewContext dbContext)
         {
             InitializeComponent();
-            newContext = new Context();
-        }
+            newContext = new NewContext();
 
-        public void button1_Click(object sender, EventArgs e)
+
+            //
+            newContext = dbContext;
+
+
+        }
+        public List<object> ViewTopSalesPersons()
         {
             //Wyczyszcenie kolumn i wierszy przed kolejnym zapytaniem
             dataGridView1.Rows.Clear();
@@ -26,11 +31,11 @@ namespace WinForms
             dataGridView1.Columns.Add("CurrencyRateIDNotSet", "Zamówienia_z_nieustawionym_kursem_waluty");
 
 
-            int year = Convert.ToInt32(comboBox1.SelectedItem);
+            int year = 2023;//Convert.ToInt32(comboBox1.SelectedItem);
             int rows = Convert.ToInt32(numericUpDown2.Value);
 
             //wy³uskanie z bazy danych odpowiednich informacji
-            var data = newContext.SalesOrderHeader
+            var data = newContext.SalesOrderHeaders
             .Where(x => x.OrderDate.Year == year)
             .GroupBy(x => x.SalesPersonID)
             .Select(group => new
@@ -42,12 +47,12 @@ namespace WinForms
                 CurrencyRateIDNotSet = group.Count(order => !order.CurrencyRateID.HasValue)
             })
                 .OrderByDescending(result => result.TotalOrders)
-                .Take(rows+1)
+                .Take(rows + 1)
                 .ToList();
 
             //wypisanie wszystkich danych do dataGridView1
             foreach (var item in data.Where(i => i != null))
-            {                
+            {
                 dataGridView1.Rows.Add(item.SalesPersonID, item.TotalOrders, item.TotalDue, item.CurrencyRateIDSet, item.CurrencyRateIDNotSet);
             }
 
@@ -55,8 +60,15 @@ namespace WinForms
             int totalRowsHeight = dataGridView1.ColumnHeadersHeight + dataGridView1.Rows.Cast<DataGridViewRow>().Sum(r => r.Height);
             this.Height = totalRowsHeight + 200; dataGridView1.AutoResizeColumns();
             dataGridView1.Height = dataGridView1.ColumnHeadersHeight + (dataGridView1.RowCount * 25);
-
+            
+            return data.Cast<object>().ToList();
         }
+
+        public void button1_Click(object sender, EventArgs e)
+        {
+            ViewTopSalesPersons();
+        }
+        
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {

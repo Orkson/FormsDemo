@@ -119,12 +119,11 @@
         }
 
         #endregion
-
-        private DataGridView dataGridView1;
         private Button button1;
         private ComboBox comboBox1;
         private NumericUpDown numericUpDown2;
         private Label label1;
         private Label label2;
+        public DataGridView dataGridView1;
     }
 }

@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace WinForms.Data
 {
-    internal class Context : DbContext
+    public class NewContext : DbContext, INewContext
     {
-        public Context() : base("AdventureWorks2019")
+        public NewContext() : base("AdventureWorks2019")
         {
 
         }
-        public DbSet<SalesOrderHeader> SalesOrderHeader { get; set; }
+        public DbSet<SalesOrderHeader> SalesOrderHeaders { get; set; }
     }
 
 }

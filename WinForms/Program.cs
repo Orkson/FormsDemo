@@ -1,3 +1,5 @@
+using WinForms.Data;
+
 namespace WinForms
 {
     internal static class Program
@@ -5,8 +7,9 @@ namespace WinForms
         [STAThread]
         static void Main()
         {
+            var dbContext = new NewContext();
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(new Form1(dbContext));
         }
     }
 }
