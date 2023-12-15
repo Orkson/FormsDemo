@@ -20,9 +20,21 @@ namespace WinFormsTests
             var ContextMock = new Mock<INewContext>();
             var salesOrderHeaders = new List<SalesOrderHeader>
         {
-            new SalesOrderHeader { SalesPersonID = 1, TotalDue = 1, CurrencyRateID = 1, OrderDate = new DateTime(2023, 1, 1) },
-         
-            
+            //dane testowe
+            new SalesOrderHeader { SalesPersonID = 277, TotalDue = 123, CurrencyRateID = 4, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 279, TotalDue = 41, CurrencyRateID = 4, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 279, TotalDue = 4623, CurrencyRateID = null, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 276, TotalDue = 135, CurrencyRateID = 4, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 276, TotalDue = 131, CurrencyRateID = 4, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 282, TotalDue = 425, CurrencyRateID = null, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 276, TotalDue = 42, CurrencyRateID = 52, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 275, TotalDue = 5234, CurrencyRateID = null, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 275, TotalDue = 315, CurrencyRateID = 52, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 276, TotalDue = 537, CurrencyRateID = 52, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 277, TotalDue = 12, CurrencyRateID = null, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 234, TotalDue = 246, CurrencyRateID = 52, OrderDate = new DateTime(2023, 1, 1) },
+            new SalesOrderHeader { SalesPersonID = 222, TotalDue = 537, CurrencyRateID = 60, OrderDate = new DateTime(2023, 1, 1) },
+
         }.AsQueryable();
 
             var salesOrderHeadersMockSet = new Mock<DbSet<SalesOrderHeader>>();
@@ -34,20 +46,30 @@ namespace WinFormsTests
             ContextMock.Setup(x => x.SalesOrderHeaders).Returns(salesOrderHeadersMockSet.Object);
 
 
-            var salesAnalyzer = new Form1(ContextMock.Object);
-            var result = salesAnalyzer.ViewTopSalesPersons();
-            //var form = new Form1();
-            //form.ViewTopSalesPersons();
+            var ViewTopSales = new Form1(ContextMock.Object);
+
+
+            var results = ViewTopSales.ViewTopSalesPersons(2023, 4); //wyniki z 2023 roku, 4 wiersze
+            
 
             // Assert
-            Assert.IsNotNull(result, "Wyniki nie mog¹ buæ null");
-            Assert.AreEqual(4, result.Count, "s¹ równe");
+            
+            Assert.IsNotNull(results, "Wyniki nie mog¹ buæ puste");
+            Assert.AreEqual(4, results.Count, "Musz¹ byæ zwrócone 4 wyniki");
 
+            int lastTotalOrders = int.MaxValue;
 
-            //Assert.IsNotNull(result.Data, "Data source should not be null");
+            foreach (var item in results)
+            {
+                //TotalOrders musi byæ posortowane od najwiêkszej iloœci
+                var totalOrders = (int)item.GetType().GetProperty("TotalOrders").GetValue(item);
+                Assert.IsTrue(totalOrders <= lastTotalOrders, "TotalOrders nie jest posortowane");
 
-            //Assert.IsNotNull(dataSource, "");
-            //Assert.IsTrue(dataSource.Count > 3, "");
+                //TotalDue musi byæ wiêksze od zera
+                var totalDue = (decimal)item.GetType().GetProperty("TotalDue").GetValue(item);
+                Assert.IsTrue(totalDue > 0, "TotalDue > 0");
+            }
+
 
 
         }

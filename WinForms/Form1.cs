@@ -17,7 +17,7 @@ namespace WinForms
 
 
         }
-        public List<object> ViewTopSalesPersons()
+        public List<object> ViewTopSalesPersons(int year, int rows)
         {
             //Wyczyszcenie kolumn i wierszy przed kolejnym zapytaniem
             dataGridView1.Rows.Clear();
@@ -31,8 +31,6 @@ namespace WinForms
             dataGridView1.Columns.Add("CurrencyRateIDNotSet", "Zamówienia_z_nieustawionym_kursem_waluty");
 
 
-            int year = 2023;//Convert.ToInt32(comboBox1.SelectedItem);
-            int rows = Convert.ToInt32(numericUpDown2.Value);
 
             //wy³uskanie z bazy danych odpowiednich informacji
             var data = newContext.SalesOrderHeaders
@@ -47,7 +45,7 @@ namespace WinForms
                 CurrencyRateIDNotSet = group.Count(order => !order.CurrencyRateID.HasValue)
             })
                 .OrderByDescending(result => result.TotalOrders)
-                .Take(rows + 1)
+                .Take(rows)
                 .ToList();
 
             //wypisanie wszystkich danych do dataGridView1
@@ -66,7 +64,9 @@ namespace WinForms
 
         public void button1_Click(object sender, EventArgs e)
         {
-            ViewTopSalesPersons();
+            int year = Convert.ToInt32(comboBox1.SelectedItem);
+            int rows = Convert.ToInt32(numericUpDown2.Value);
+            ViewTopSalesPersons(year, rows +1);
         }
         
 
