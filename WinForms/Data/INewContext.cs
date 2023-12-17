@@ -9,6 +9,6 @@ namespace WinForms.Data
 {
     public interface INewContext
     {
-        public DbSet<SalesOrderHeader> SalesOrderHeaders { get; set; }
+        public DbSet<SalesOrderHeader>? SalesOrderHeaders { get; set; }
     }
 }

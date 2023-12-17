@@ -11,9 +11,9 @@ namespace WinForms.Data
     {
         public NewContext() : base("AdventureWorks2019")
         {
-
+            
         }
-        public DbSet<SalesOrderHeader> SalesOrderHeaders { get; set; }
+        public DbSet<SalesOrderHeader>? SalesOrderHeaders { get; set; }
     }
 
 }

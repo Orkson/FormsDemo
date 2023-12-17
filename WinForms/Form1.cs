@@ -47,7 +47,7 @@ namespace WinForms
                 .OrderByDescending(result => result.TotalOrders)
                 .Take(rows)
                 .ToList();
-
+            
             //wypisanie wszystkich danych do dataGridView1
             foreach (var item in data.Where(i => i != null))
             {

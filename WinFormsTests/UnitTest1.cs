@@ -65,11 +65,13 @@ namespace WinFormsTests
                 var totalOrders = (int)item.GetType().GetProperty("TotalOrders").GetValue(item);
                 Assert.IsTrue(totalOrders <= lastTotalOrders, "TotalOrders nie jest posortowane");
 
+                //TotalOrders musi byæ wiêksze od zera
+                Assert.IsTrue(totalOrders >= 0, "TotalOrders > 0");
+
                 //TotalDue musi byæ wiêksze od zera
                 var totalDue = (decimal)item.GetType().GetProperty("TotalDue").GetValue(item);
                 Assert.IsTrue(totalDue > 0, "TotalDue > 0");
             }
-
 
 
         }
