@@ -30,8 +30,6 @@ namespace WinForms
             dataGridView1.Columns.Add("CurrencyRateIDSet", "Zamówienia_z_ustawionym_kursem_waluty");
             dataGridView1.Columns.Add("CurrencyRateIDNotSet", "Zamówienia_z_nieustawionym_kursem_waluty");
 
-
-
             //wy³uskanie z bazy danych odpowiednich informacji
             var data = newContext.SalesOrderHeaders
             .Where(x => x.OrderDate.Year == year)
